@@ -8,9 +8,9 @@ import (
 	"github.com/go-chi/chi/v5"
 )
 
-func GetAll() http.HandlerFunc {
+func GetAll(db storage.Repositories) http.HandlerFunc {
 	return func(res http.ResponseWriter, req *http.Request) {
-		res.Write([]byte("GETALL"))
+		res.Write(db.ReadAll())
 	}
 }
 

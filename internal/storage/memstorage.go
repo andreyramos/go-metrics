@@ -1,6 +1,9 @@
 package storage
 
-import "strconv"
+import (
+	"fmt"
+	"strconv"
+)
 
 type Guage float64
 type Counter int64
@@ -8,11 +11,12 @@ type Counter int64
 type Repositories interface {
 	SaveGuage(string, Guage)
 	SaveCounter(string, Counter)
+	ReadAll() []byte
 }
 
 type MemStorage struct {
-	gauges   map[string]Guage
-	counters map[string]Counter
+	Gauges   map[string]Guage
+	Counters map[string]Counter
 }
 
 func NewMemStorage() *MemStorage {
@@ -22,18 +26,18 @@ func NewMemStorage() *MemStorage {
 }
 
 func (m *MemStorage) SaveGuage(key string, val Guage) {
-	m.gauges[key] = val
+	m.Gauges[key] = val
 }
 
 func (m *MemStorage) SaveCounter(key string, val Counter) {
 
-	_, ok := m.counters[key]
+	_, ok := m.Counters[key]
 	if !ok {
-		m.counters[key] = val
+		m.Counters[key] = val
 		return
 	}
 
-	m.counters[key] += val
+	m.Counters[key] += val
 }
 
 func (g *Guage) FromString(str string) error {
@@ -52,4 +56,17 @@ func (c *Counter) FromString(str string) error {
 	}
 	*c = Counter(val)
 	return nil
+}
+
+func (m *MemStorage) ReadAll() []byte {
+	l := "ALL METRICS ===============\r\n"
+	l += "GUAGE ===============\r\n"
+	for k, v := range m.Gauges {
+		l += fmt.Sprintf("%s: %v\r\n", k, v)
+	}
+	l += "COUNTER ===============\r\n"
+	for k, v := range m.Counters {
+		l += fmt.Sprintf("%s: %v\r\n", k, v)
+	}
+	return []byte(l)
 }

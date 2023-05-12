@@ -17,7 +17,7 @@ func main() {
 	r := chi.NewRouter()
 
 	r.Route("/", func(r chi.Router) {
-		r.Get("/", handlers.GetAll())
+		r.Get("/", handlers.GetAll(db))
 		r.Route("/value/{type}", func(r chi.Router) {
 			r.Get("/{name}", handlers.Get())
 		})
