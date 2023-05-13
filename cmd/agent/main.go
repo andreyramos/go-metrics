@@ -17,6 +17,8 @@ func main() {
 	flag.IntVar(&flagPullInt, "p", 2, "frequency of polling metrics from the runtime package")
 	flag.IntVar(&flagRepInt, "r", 10, "frequency of sending metrics to the server")
 
+	flag.Parse()
+
 	cfg := agent.Config{
 		PullInterval:   time.Duration(flagPullInt) * time.Second,
 		ReportInterval: time.Duration(flagRepInt) * time.Second,

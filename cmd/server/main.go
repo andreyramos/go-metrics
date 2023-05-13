@@ -16,6 +16,8 @@ func main() {
 	var flagAddr string
 	flag.StringVar(&flagAddr, "a", "localhost:8080", "address and port to run agent")
 
+	flag.Parse()
+
 	db := storage.NewMemStorage()
 
 	r := chi.NewRouter()
