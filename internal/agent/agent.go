@@ -14,7 +14,6 @@ type Config struct {
 	PullInterval   time.Duration
 	ReportInterval time.Duration
 	Address        string
-	Port           string
 }
 
 type Agent struct {
@@ -71,7 +70,7 @@ func (a *Agent) Update() {
 }
 
 func (a *Agent) SendMetric(mtype, name, value string) error {
-	url := fmt.Sprintf("http://%s:%s/update/%s/%s/%s", a.cfg.Address, a.cfg.Port, mtype, name, value)
+	url := fmt.Sprintf("http://%s/update/%s/%s/%s", a.cfg.Address, mtype, name, value)
 	request, err := http.NewRequest(http.MethodPost, url, nil)
 
 	if err != nil {

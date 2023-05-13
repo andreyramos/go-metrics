@@ -11,7 +11,6 @@ type Counter int64
 type Repositories interface {
 	SaveGuage(string, Guage)
 	SaveCounter(string, Counter)
-	// ReadAll() []byte
 	GetGauge(string) (Guage, error)
 	GetCounter(string) (Counter, error)
 	GetAll() (map[string]Guage, map[string]Counter, error)
@@ -82,16 +81,3 @@ func (m *MemStorage) GetCounter(key string) (Counter, error) {
 func (m *MemStorage) GetAll() (map[string]Guage, map[string]Counter, error) {
 	return m.Gauges, m.Counters, nil
 }
-
-// func (m *MemStorage) ReadAll() []byte {
-// 	l := "ALL METRICS ===============\r\n"
-// 	l += "GUAGE ===============\r\n"
-// 	for k, v := range m.Gauges {
-// 		l += fmt.Sprintf("%s: %v\r\n", k, v)
-// 	}
-// 	l += "COUNTER ===============\r\n"
-// 	for k, v := range m.Counters {
-// 		l += fmt.Sprintf("%s: %v\r\n", k, v)
-// 	}
-// 	return []byte(l)
-// }

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"log"
 	"net/http"
 
@@ -11,6 +12,9 @@ import (
 )
 
 func main() {
+
+	var flagAddr string
+	flag.StringVar(&flagAddr, "a", "127.0.0.1:8080", "address and port to run agent")
 
 	db := storage.NewMemStorage()
 
@@ -26,6 +30,6 @@ func main() {
 		})
 	})
 
-	log.Fatal(http.ListenAndServe(":8080", r))
+	log.Fatal(http.ListenAndServe(flagAddr, r))
 
 }
