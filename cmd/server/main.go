@@ -4,6 +4,7 @@ import (
 	"flag"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/go-chi/chi/v5"
 
@@ -17,6 +18,10 @@ func main() {
 	flag.StringVar(&flagAddr, "a", "localhost:8080", "address and port to run agent")
 
 	flag.Parse()
+
+	if envAddr := os.Getenv("V"); envAddr != "" {
+		flagAddr = envAddr
+	}
 
 	db := storage.NewMemStorage()
 
