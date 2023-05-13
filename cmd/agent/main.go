@@ -13,7 +13,7 @@ func main() {
 	var flagPullInt int
 	var flagRepInt int
 
-	flag.StringVar(&flagAddr, "a", "127.0.0.1:8080", "address and port to run agent")
+	flag.StringVar(&flagAddr, "a", "localhost:8080", "address and port to run agent")
 	flag.IntVar(&flagPullInt, "p", 2, "frequency of polling metrics from the runtime package")
 	flag.IntVar(&flagRepInt, "r", 10, "frequency of sending metrics to the server")
 

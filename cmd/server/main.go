@@ -14,7 +14,7 @@ import (
 func main() {
 
 	var flagAddr string
-	flag.StringVar(&flagAddr, "a", "127.0.0.1:8080", "address and port to run agent")
+	flag.StringVar(&flagAddr, "a", "localhost:8080", "address and port to run agent")
 
 	db := storage.NewMemStorage()
 
