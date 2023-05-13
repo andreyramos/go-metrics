@@ -46,14 +46,14 @@ func Get(db storage.Repositories) http.HandlerFunc {
 				http.Error(res, err.Error(), http.StatusNotFound)
 				return
 			}
-			val = fmt.Sprintf("%f", g)
+			val = fmt.Sprintf("%v", g)
 		case "counter":
 			c, err := db.GetCounter(name)
 			if err != nil {
 				http.Error(res, err.Error(), http.StatusNotFound)
 				return
 			}
-			val = fmt.Sprintf("%d", c)
+			val = fmt.Sprintf("%v", c)
 		default:
 			err := fmt.Errorf("not implemeted")
 			http.Error(res, err.Error(), http.StatusNotImplemented)
