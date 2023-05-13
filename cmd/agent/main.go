@@ -22,17 +22,17 @@ func main() {
 
 	flag.Parse()
 
-	if envAddr := os.Getenv("V"); envAddr != "" {
+	if envAddr := os.Getenv("ADDRESS"); envAddr != "" {
 		flagAddr = envAddr
 	}
-	if envPullInt := os.Getenv("V"); envPullInt != "" {
+	if envPullInt := os.Getenv("POLL_INTERVAL"); envPullInt != "" {
 		val, err := strconv.ParseInt(envPullInt, 10, 64)
 		if err != nil {
 			log.Fatal(err)
 		}
 		flagPullInt = int(val)
 	}
-	if envRepInt := os.Getenv("V"); envRepInt != "" {
+	if envRepInt := os.Getenv("REPORT_INTERVAL"); envRepInt != "" {
 		val, err := strconv.ParseInt(envRepInt, 10, 64)
 		if err != nil {
 			log.Fatal(err)

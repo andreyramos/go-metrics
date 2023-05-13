@@ -19,7 +19,7 @@ func main() {
 
 	flag.Parse()
 
-	if envAddr := os.Getenv("V"); envAddr != "" {
+	if envAddr := os.Getenv("ADDRESS"); envAddr != "" {
 		flagAddr = envAddr
 	}
 
