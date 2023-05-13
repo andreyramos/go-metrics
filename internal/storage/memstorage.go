@@ -11,7 +11,10 @@ type Counter int64
 type Repositories interface {
 	SaveGuage(string, Guage)
 	SaveCounter(string, Counter)
-	ReadAll() []byte
+	// ReadAll() []byte
+	GetGauge(string) (Guage, error)
+	GetCounter(string) (Counter, error)
+	GetAll() (map[string]Guage, map[string]Counter, error)
 }
 
 type MemStorage struct {
@@ -58,15 +61,37 @@ func (c *Counter) FromString(str string) error {
 	return nil
 }
 
-func (m *MemStorage) ReadAll() []byte {
-	l := "ALL METRICS ===============\r\n"
-	l += "GUAGE ===============\r\n"
-	for k, v := range m.Gauges {
-		l += fmt.Sprintf("%s: %v\r\n", k, v)
+func (m *MemStorage) GetGauge(key string) (Guage, error) {
+	gauge, ok := m.Gauges[key]
+	if !ok {
+		return Guage(0), fmt.Errorf("gauge metric with key '%s' not found", key)
 	}
-	l += "COUNTER ===============\r\n"
-	for k, v := range m.Counters {
-		l += fmt.Sprintf("%s: %v\r\n", k, v)
-	}
-	return []byte(l)
+
+	return gauge, nil
 }
+
+func (m *MemStorage) GetCounter(key string) (Counter, error) {
+	counter, ok := m.Counters[key]
+	if !ok {
+		return Counter(0), fmt.Errorf("counter metric with key '%s' not found", key)
+	}
+
+	return counter, nil
+}
+
+func (m *MemStorage) GetAll() (map[string]Guage, map[string]Counter, error) {
+	return m.Gauges, m.Counters, nil
+}
+
+// func (m *MemStorage) ReadAll() []byte {
+// 	l := "ALL METRICS ===============\r\n"
+// 	l += "GUAGE ===============\r\n"
+// 	for k, v := range m.Gauges {
+// 		l += fmt.Sprintf("%s: %v\r\n", k, v)
+// 	}
+// 	l += "COUNTER ===============\r\n"
+// 	for k, v := range m.Counters {
+// 		l += fmt.Sprintf("%s: %v\r\n", k, v)
+// 	}
+// 	return []byte(l)
+// }

@@ -10,13 +10,58 @@ import (
 
 func GetAll(db storage.Repositories) http.HandlerFunc {
 	return func(res http.ResponseWriter, req *http.Request) {
-		res.Write(db.ReadAll())
+		gs, cs, err := db.GetAll()
+
+		if err != nil {
+			http.Error(res, err.Error(), http.StatusNotFound)
+			return
+		}
+
+		body := "<h1>All metrics</h1>"
+		body += "<h2>Guages</h2>"
+		for k, v := range gs {
+			body += fmt.Sprintf("<div>%s: %v</div>", k, v)
+		}
+		body += "<h2>Counters</h2>"
+		for k, v := range cs {
+			body += fmt.Sprintf("<div>%s: %v</div>", k, v)
+		}
+
+		res.Header().Set("content-type", "text/HTML")
+		res.WriteHeader(http.StatusOK)
+		res.Write([]byte(body))
 	}
 }
 
-func Get() http.HandlerFunc {
+func Get(db storage.Repositories) http.HandlerFunc {
 	return func(res http.ResponseWriter, req *http.Request) {
-		res.Write([]byte("GET"))
+		metricType := chi.URLParam(req, "type")
+		name := chi.URLParam(req, "name")
+		var val string
+
+		switch metricType {
+		case "gauge":
+			g, err := db.GetGauge(name)
+			if err != nil {
+				http.Error(res, err.Error(), http.StatusNotFound)
+				return
+			}
+			val = fmt.Sprintf("%f", g)
+		case "counter":
+			c, err := db.GetCounter(name)
+			if err != nil {
+				http.Error(res, err.Error(), http.StatusNotFound)
+				return
+			}
+			val = fmt.Sprintf("%d", c)
+		default:
+			err := fmt.Errorf("not implemeted")
+			http.Error(res, err.Error(), http.StatusNotImplemented)
+			return
+		}
+
+		res.WriteHeader(http.StatusOK)
+		res.Write([]byte(val))
 	}
 }
 
@@ -25,11 +70,6 @@ func Post(db storage.Repositories) http.HandlerFunc {
 		metricType := chi.URLParam(req, "type")
 		name := chi.URLParam(req, "name")
 		value := chi.URLParam(req, "value")
-
-		body := "POST\r\n"
-		body += metricType + "\r\n"
-		body += name + "\r\n"
-		body += value + "\r\n"
 
 		switch metricType {
 		case "gauge":
@@ -57,6 +97,5 @@ func Post(db storage.Repositories) http.HandlerFunc {
 		}
 
 		res.WriteHeader(http.StatusOK)
-		res.Write([]byte(body))
 	}
 }

@@ -19,7 +19,7 @@ func main() {
 	r.Route("/", func(r chi.Router) {
 		r.Get("/", handlers.GetAll(db))
 		r.Route("/value/{type}", func(r chi.Router) {
-			r.Get("/{name}", handlers.Get())
+			r.Get("/{name}", handlers.Get(db))
 		})
 		r.Route("/update/{type}", func(r chi.Router) {
 			r.Post("/{name}/{value}", handlers.Post(db))
